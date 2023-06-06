@@ -81,20 +81,18 @@ export async function fetchCollectiontProperties(collectionAddress) {
   // create a new contract object
   const collectionContract = new ethers.Contract(collectionAddress, collectionAbi, provider);
 
-  const [name, symbol, totalMinted] = await Promise.all([
+  const [name, symbol, totalMinted, price, totalSupply] = await Promise.all([
     collectionContract.name(),
     collectionContract.symbol(),
     collectionContract.getNumberOfMinted(),
+    collectionContract._price(),
+    collectionContract._totalSupply(),
   ]);
-  return { name, symbol, totalMinted };
+  return { name, symbol, totalMinted, price, totalSupply };
 
 }
 
-export async function dohvatiTestniContractProperties() {
-  return fetchCollectiontProperties(testniContractAddress);
-}
-
-export async function mintTokens(amount) {
+export async function mintTokens(amount, price) {
     if (!signer) {
         console.error("Wallet is not connected");
         return;
@@ -105,7 +103,7 @@ export async function mintTokens(amount) {
         return;
     }
 
-    const mintingCost = ethers.BigNumber.from(_price).mul(amount);  // Calculate total minting cost
+    const mintingCost = ethers.BigNumber.from(price).mul(amount);  // Calculate total minting cost
     let overrides = {
         value: mintingCost  // Pay the minting cost
     };

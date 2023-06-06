@@ -57,8 +57,8 @@
 }
 
 .image-card img {
-  max-width: 400px;
-  height: 500px;
+  max-width: 300px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { mintTokens } from "../ethers";
+import { mintTokens, fetchCollectiontProperties } from "../ethers";
+
+
+const { ...contractAddress } = window.REACT_APP_PROPERTIES;
 
 const AdditionalDescription = () => {
   const [numTokens, setNumTokens] = useState(1);
   const [mintedTokens, setMintedTokens] = useState(0);
   const [totalSupply, setTotalSupply] = useState(0);
+  const [price, setPrice] = useState(0);
 
   useEffect(() => {
     async function fetchContractData() {
-      const totalSupply = await contract._maxSupply(); // Use your contract instance
-      const mintedTokens = await contract.getNumberOfMinted();
+      const { name, symbol, totalMinted, price, totalSupply } = await fetchCollectiontProperties(contractAddress);
       
       setTotalSupply(totalSupply);
-      setMintedTokens(mintedTokens);
+      setMintedTokens(totalMinted);
+      setPrice(price);
     }
     
     fetchContractData();
@@ -28,7 +32,7 @@ const AdditionalDescription = () => {
 
   const handleMint = async () => {
     try {
-      await mintTokens(numTokens);
+      await mintTokens(numTokens, price);
       setMintedTokens(mintedTokens + numTokens);
     } catch (error) {
       console.error("Failed to mint tokens:", error);

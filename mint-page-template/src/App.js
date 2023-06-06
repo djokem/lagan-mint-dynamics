@@ -5,18 +5,9 @@ import { useState, useEffect } from "react";
 import { init, connectWallet, handleAccountsChanged } from "./ethers";
 import AdditionalDescription from "./components/AdditionalDescription"
 
-// const { title, description, bannerImageUrl, passUrl } = window.REACT_APP_PROPERTIES;
-
-const { title, description, bannerImageUrl, passUrl } = { 
-  title: "client1", 
-  description: "Client1 Collection",
-  bannerImageUrl: "client1/Client1 Collection/banner_image.jpeg",
-  passUrl: "client1/Client1 Collection/pass_image.jpeg"
-};
+const { title, description, bannerImageUrl, passUrl, contractAddress } = window.REACT_APP_PROPERTIES;
 
 function App() {
-
-  const [walletConnected, setWalletConnected] = useState(false);
 
   useEffect(() => {
     init();
@@ -29,12 +20,6 @@ function App() {
       window.ethereum.on("chainChanged", (_chainId) => window.location.reload());
     }
   }, []);
-
-
-  const handleConnectWallet = () => {
-    connectWallet();
-    setWalletConnected(true);
-  };
 
   return (
     <div className="app">
@@ -50,11 +35,19 @@ function App() {
 }
 
 const Banner = () => {
+
+  const [walletConnected, setWalletConnected] = useState(false);
+
+  const handleConnectWallet = () => {
+    connectWallet();
+    setWalletConnected(true);
+  };
+
   return (
     <div className="banner">
       <img src={bannerImageUrl} alt="Missing banner" />
       <h1 className="title">{title}</h1>
-      <button onClick={handleConnectWallet} className="styled-button" disabled={!isValidNumTokens}>
+      <button onClick={handleConnectWallet} className="styled-button">
         Connect Wallet
       </button>
     </div>
